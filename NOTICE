@@ -1,0 +1,14 @@
+Product: JoinMarket ABCMint
+
+Attributions:
+- JoinMarket (jmclient, jmbase, related modules) — GPLv3.
+- Flask — BSD-3-Clause.
+- Waitress — Zope Public License 2.1.
+- Twisted — MIT.
+- zope.interface — Zope Public License 2.1.
+- cryptography — Apache-2.0 and BSD components.
+- PyQt6 — GPLv3 or commercial license from Riverbank Computing.
+
+This product contains or depends on open-source components.
+License texts are provided in their respective upstream projects.
+Where applicable, copyright notices and license terms are preserved.

@@ -1,42 +1,61 @@
-# JoinMarket‑ABCMint Launcher 1.0.0 發行說明
+# JoinMarket ABCMint 適配與啟動器
 
-## 概述
-本版本提供 Windows 平台的 ABCMint Mix Launcher（基於 PyQt6）與本地混幣服務托管（waitress），面向終端用戶簡化設定與啟動流程。
+本倉庫提供 JoinMarket 在 ABCMint 區塊鏈上的適配層與一個 Windows 啟動器（ABCMint Mix Launcher），用於快速拉起本地混幣服務與 Web 介面。
 
-## 下載與校驗
-- 可執行檔：`joinmarket_abcmint/dist/JoinMarket-ABCMint-LauncherV1.0.0.exe`
-- SHA256：`8B21AAF4A8437D7D42477DAF08E599313577D8EC44500819E3A31580667DFC3D`
+## 快速開始（終端用戶）
+- 可執行檔：`dist/JoinMarket-ABCMint-LauncherV1.0.0.exe`
+- 執行步驟：
+  1. 本機需已執行啟用 JSON‑RPC 的 ABCMint/相容 Bitcoin 節點（`127.0.0.1` 可存取）。
+  2. 滑鼠雙擊啟動器 EXE，填寫 `RPC Port/User/Password`（埠預設 `8332`）。
+  3. 點擊 `[ INITIALIZE LINK ]` 進行連線測試，成功後自動開啟 `http://localhost:5000`。
+- 詳細指南：見 [啟動器使用指南](docs/啟動器使用指南.md)
+
+## 校驗
 - PowerShell 校驗：
   ```powershell
-  Get-FileHash -Path "joinmarket_abcmint/dist/JoinMarket-ABCMint-LauncherV1.0.0.exe" -Algorithm SHA256 | Select-Object -ExpandProperty Hash
+  Get-FileHash -Path "dist/JoinMarket-ABCMint-LauncherV1.0.0.exe" -Algorithm SHA256 | Select-Object -ExpandProperty Hash
   ```
+- SHA256 校驗值：`8B21AAF4A8437D7D42477DAF08E599313577D8EC44500819E3A31580667DFC3D`
 
-## 新特性
-- 圖形介面：參數填寫（RPC 埠/使用者名稱/密碼）、連線測試、日誌輸出、系統托盤常駐與快速開啟 Web UI。
-- 服務托管：使用 `waitress` 啟動後端服務，監聽 `0.0.0.0:5000`，存取 `http://localhost:5000`。
-- 設定持久化：`%LOCALAPPDATA%/JoinMarket-ABCMint/launcher_config.json` 自動載入/儲存。
-- 打包流程：提供 PyInstaller 規範檔與建置產物目錄。
+## 專案結構
+- `service/`：後端混幣服務（Flask/Waitress），入口 `app.py`，說明見 [`service/README.md`](service/README.md)。
+- `src/`：適配層原始碼，如 `jmclient/abcmint_interface.py`。
+- `joinmarket-clientserver-master/`：上游 JoinMarket 原始碼與文件。
+- `launcher.py`：Windows 啟動器原始碼；打包規範 `JoinMarket-ABCMint-LauncherV1.0.0.spec`。
+- `dist/`、`build/`：打包產物目錄。
+- `docs/`：專案文件集合（見下文索引）。
 
-## 升級與注意事項
-- 節點要求：需本機執行啟用 JSON‑RPC 的 ABCMint/相容 Bitcoin 節點，預設 `127.0.0.1` 與埠 `8332`。
-- 相容性：缺少 `estimatesmartfee/getmempoolinfo/testmempoolaccept/gettxoutproof/verifytxoutproof`，費用策略採 `paytxfee` 基線與回退；RBF 固定為 `False`；錢包視圖透過地址過濾與 UTXO 查詢實作。
-- 埠占用：後端固定 `5000`，若占用需釋放後重試。
-- 單一實例：再次啟動將提示已在執行，請於系統托盤管理。
+## 文件入口
+- 使用指南：[啟動器使用指南.md](docs/啟動器使用指南.md)
+- 安裝部署：[安裝部署指南.md](docs/安裝部署指南.md)
+- 相容性說明：[相容性說明.md](docs/相容性說明.md)
+- 遷移說明：[遷移說明.md](docs/遷移說明.md)
+- 持續整合：[持續整合指南.md](docs/持續整合指南.md)
+- 服務說明：[service/README.md](service/README.md)
+- 上游指南：[README.md](joinmarket-clientserver-master/README.md)、[USAGE.md](joinmarket-clientserver-master/docs/USAGE.md)
 
-## 已知問題
-- 在極端網路或節點負載情況下，連線測試可能逾時，請檢查 RPC 鑑權與網路連線。
-- 不支援證明相關介面的功能將降級或停用。
+## 開發與建置
+- 語言與環境：Python 3.12，Windows 建議使用 PowerShell。
+- 相依參考：`requirements_launcher.txt`（啟動器）與服務端 `service/requirements.txt`。
+- 路徑準備：確保 `joinmarket-clientserver-master/src`、`service` 於執行路徑可匯入。
+- 打包：使用 PyInstaller，規範檔 `JoinMarket-ABCMint-LauncherV1.0.0.spec`。
 
-## 回滾
-- 若需回退，保留上一版本可執行檔與設定檔；或自原始碼執行 `joinmarket_abcmint/service/start_service.py` 以繼續使用後端服務。
+## 版本與發佈
+- 啟動器版本以可執行檔與 GUI 標題展示（`V1.0.0`/`V.1.0`）。
+ - 變更日誌：見 [`CHANGELOG.md`](CHANGELOG.md)
+- 發行說明：見 [`docs/release-notes/發行說明-JoinMarket-ABCMint-Launcher-1.0.0.md`](docs/release-notes/發行說明-JoinMarket-ABCMint-Launcher-1.0.0.md)
+- 正式發佈前建議固定相依版本與建置環境，並於後續版本持續更新以上文件。
 
-## 文件與參考
-- 啟動器使用指南：`joinmarket_abcmint/docs/啟動器使用指南.md`
-- 安裝與部署：`joinmarket_abcmint/docs/安裝部署指南.md`
-- 相容性說明：`joinmarket_abcmint/docs/相容性說明.md`
-- 遷移說明：`joinmarket_abcmint/docs/遷移說明.md`
-- 服務說明：`joinmarket_abcmint/service/README.md`
+## 授權與致謝
+- 本倉庫依賴並致謝上游 JoinMarket 專案及相關開源組件。
+- 專案採用 GPLv3 授權；詳見 `LICENSE`、`NOTICE` 與 `THIRD-PARTY-LICENSES.txt`。
+- 上游 JoinMarket 授權與文本：`joinmarket-clientserver-master/LICENSE`。
 
-## 致謝與授權
-- 致謝 JoinMarket 上游專案與相關開源相依。
-- 授權以各自倉庫為準。
+## 合規發佈
+- 使用 GitHub Releases 上傳可執行檔與校驗檔，不將二進制直接提交到代碼區。
+- 於 Release Notes 附上系統需求、使用說明、已知問題與變更列表（模板見 `docs/release-notes/RELEASE_TEMPLATE.md`）。
+- 提供對應版本源碼與構建規範（包含本倉庫全部內容與 `*.spec`）。
+- 生成校驗檔：
+  ```powershell
+  pwsh joinmarket_abcmint/scripts/generate_checksums.ps1 -DistPath "joinmarket_abcmint/dist" -Pattern "*.exe"
+  ```

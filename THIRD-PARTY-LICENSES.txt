@@ -1,0 +1,31 @@
+Component: JoinMarket (jmclient, jmbase)
+License: GPL-3.0
+Source: https://github.com/JoinMarket-Org/joinmarket-clientserver
+
+Component: Flask
+License: BSD-3-Clause
+Source: https://palletsprojects.com/p/flask/
+
+Component: Waitress
+License: Zope Public License 2.1
+Source: https://docs.pylonsproject.org/projects/waitress/en/latest/
+
+Component: Twisted
+License: MIT
+Source: https://twistedmatrix.com/
+
+Component: zope.interface
+License: Zope Public License 2.1
+Source: https://zope.org/
+
+Component: cryptography
+License: Apache-2.0 (with BSD components)
+Source: https://cryptography.io/
+
+Component: PyQt6
+License: GPL-3.0 or Riverbank commercial
+Source: https://www.riverbankcomputing.com/software/pyqt/
+
+Notes:
+- This file lists major third-party components bundled or required.
+- Refer to each component's repository for full license texts.
